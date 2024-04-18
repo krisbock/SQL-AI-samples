@@ -16,10 +16,10 @@ import yaml
 import os
 import shutil
 import subprocess
+from dotenv import dotenv_values
 
 print("Loading configs from file.")
-with open(f'./configs/flow_config.json') as f:
-    config = json.load(f)
+config = dotenv_values("../../../../.env")
 
 # Creating helper functions
 # -----------------------------------------------------------------------------
@@ -132,7 +132,7 @@ with open('./deployment/model.yaml', 'w') as f:
 # Before we upload model, we create tmp directory to store current solution
 # We delete sensitive files (for now, config_local.json)
 # -----------------------------------------------------------------------------
-src_for_tmp = './promptflow_v2'
+src_for_tmp = './promptflow'
 temp_dir = '../.copilot_tmp'
 
 # if temp_dir exists already, delete it
@@ -148,8 +148,8 @@ shutil.copytree(src_for_tmp, temp_dir, dirs_exist_ok=True)
 # remove config_local.json from tmp folder
 print('Removing config_local.json from tmp folder if it exists.')
 # remove file if it exists
-if os.path.exists(os.path.join(temp_dir, 'cofigs/key_config_local.json')):
-    os.remove(os.path.join(temp_dir, 'cofigs/key_config_local.json'))
+if os.path.exists(os.path.join(temp_dir, 'configs/key_config_local.json')):
+    os.remove(os.path.join(temp_dir, 'configs/key_config_local.json'))
 # %%
 print("Register model to AML workspace.")
 command = ["az", "ml", "model", "create", "--file", "./deployment/model.yaml"]
