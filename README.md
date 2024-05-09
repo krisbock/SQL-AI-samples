@@ -6,17 +6,17 @@ This repo hosts samples meant to help design [AI applications built on data from
 
 ## Available Samples
 
-### Azure SQL + Azure Cognitive Services
+### Azure SQL + Azure AI Services
 
-The [AzureSQL_CogSearch_IntegratedVectorization](https://github.com/Azure-Samples/SQL-AI-samples/blob/main/AzureSQLACSSamples/src/AzureSQL_CogSearch_IntegratedVectorization.ipynb) sample notebook shows a simple AI application that recommends products based on a database of user reviews, using Azure Cognitive Search to store and search the relevant data. It highlights new preview features of Azure Cognitive Search, including automatic chunking and integrated vectorization of user queries.
+The [AzureSQL_AISearch_IntegratedVectorization](AzureSQLAISearchSamples/src/AzureSQL_AISearch_IntegratedVectorization.ipynb) sample notebook shows a simple AI application that recommends products based on a database of user reviews, using Azure Cognitive Search to store and search the relevant data. It highlights new preview features of Azure Cognitive Search, including automatic chunking and integrated vectorization of user queries.
 
-### Azure SQL + Azure Promptflow 
+### Azure SQL + Azure Machine Learning prompt flow 
 
-The [AzureSQL_Prompt_Flow](https://github.com/Azure-Samples/SQL-AI-samples/tree/main/AzureSQLPromptFlowSamples) sample shows an E2E example of how to build AI applications with Prompt Flow, Azure Cognitive Search, and your own data in Azure SQL database. It includes instructions on how to index your data with Azure Cognitive Search, a sample Prompt Flow local development that links everything together with Azure OpenAI connections, and also how to create an endpoint of the flow to an Azure ML workspace.
+The [AzureSQL_Prompt_flow](AzureSQLPromptFlowSamples) sample shows an E2E example of how to build AI applications with prompt flow, Azure AI Search, and your own data in an Azure SQL database. It includes instructions on how to index your data with Azure AI Search, a sample prompt flow local development that links everything together with Azure OpenAI connections, and also how to create a REST API endpoint of the flow within an Azure ML workspace.
 
 ### Azure SQL + Azure OpenAI 
 
-This example shows how to use Azure OpenAI from Azure SQL database to get the vector embeddings of any choosen text, and then calculate the cosine similarity against the Wikipedia articles (for which vector embeddings have been already calculated,) to find the articles that covers topics that are close - or similar - to the provided text.
+This example shows how to use Azure OpenAI from Azure SQL database to get the vector embeddings of any chosen text, and then calculate the cosine similarity against some Wikipedia articles (for which vector embeddings have been already calculated,) to find the articles that covers topics that are close - or similar - to the provided text.
 
 https://github.com/Azure-Samples/azure-sql-db-openai
 
@@ -39,9 +39,9 @@ https://github.com/Azure-Samples/SQL-AI-samples/tree/main/AzureSQLDatabase/Conte
 
 ### LangChain and Azure SQL Database
 
-This folder contains 2 python notebooks that use LangChain to create a NL2SQL agent against an Azure SQL Database. The notebooks use either Azure OpenAI or OpenAI for the LLM. To get started immedietly, you can create a codespace on this repository, use the terminal to change to the LangChain directory and follow one of the notebooks.
+This folder contains a Python notebook that uses the LLM framework, [LangChain](https://python.langchain.com/v0.1/docs/get_started/quickstart/), to create an NL2SQL agent against an Azure SQL Database. The notebooks uses an Azure OpenAI GPT Chat model for the LLM (must be created previously). To get started immediately, you can create a GitHub Codespace on this repository, use the terminal to change to the LangChain directory and follow one of the notebooks.
 
-https://github.com/Azure-Samples/SQL-AI-samples/tree/main/AzureSQLDatabase/LangChain
+[Azure SQL with LangChain](AzureSQLDatabase/LangChain/dbAzureOpenAI.ipynb)
 
 ## End-To-End Samples
 
