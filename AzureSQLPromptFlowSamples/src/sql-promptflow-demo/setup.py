@@ -56,7 +56,7 @@ if __name__ == "__main__":
     config = dotenv_values("../../../.env")
 
     # Send config_local.json contents to key vault
-    print("Uploading all secrets from key_config_local.json to Key Vault")
+    print("Uploading all secrets from .env to Key Vault")
     print("Note: keys will be converted to lowercase and underscores will be replaced with dashes (Key Vault requirement)")
     for key in ['AZURE_OPENAI_API_GPT_KEY', 'AZURE_OPENAI_API_EMB_KEY', 'AZURE_SEARCH_KEY', 'AZURE_SQL_CONNECTION_STRING']:
         print(f"Uploading secret {key}")
@@ -93,7 +93,7 @@ if __name__ == "__main__":
     print("successfully created connection")
 
     # %%
-    # setting up ACS/Embedding connection
+    # setting up AI search/Embedding connection
     print("Setting up AI Search connections.")
     print("Getting AIS/Embedding Connection STRING from keyvault")
     acs_key = get_keyvault_secret(config['AZURE_KEYVAULT_URI'], 'AZURE_SEARCH_KEY')
