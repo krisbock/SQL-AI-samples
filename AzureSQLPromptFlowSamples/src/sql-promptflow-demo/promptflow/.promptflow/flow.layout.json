@@ -1,44 +1,49 @@
 {
   "nodeLayouts": {
     "inputs": {
-      "x": 209,
-      "y": 62,
+      "x": 290,
+      "y": 42,
       "index": -1
     },
     "outputs": {
-      "x": 259,
-      "y": 502,
+      "x": 647.5,
+      "y": 578,
       "index": -1
     },
-    "retrieve_customer": {
-      "x": 614.5,
-      "y": 172,
+    "sql_query_store": {
+      "x": 655,
+      "y": 42,
       "index": 0
     },
-    "retrieve_past_orders": {
-      "x": 615,
-      "y": 282,
+    "get_customer": {
+      "x": 207.5,
+      "y": 176,
       "index": 1
     },
-    "retrieve_products": {
-      "x": 203.5,
-      "y": 172,
+    "get_past_orders": {
+      "x": 402.5,
+      "y": 310,
       "index": 2
     },
-    "retrieve_products_stats": {
-      "x": 84,
-      "y": 282,
+    "get_product": {
+      "x": 655,
+      "y": 176,
       "index": 3
     },
-    "chat": {
-      "x": 434,
-      "y": 392,
+    "get_sales_stat": {
+      "x": 742.5,
+      "y": 310,
       "index": 4
     },
     "get_retrieved_documents": {
-      "x": 84,
-      "y": 392,
+      "x": 917.5,
+      "y": 444,
       "index": 5
+    },
+    "chat": {
+      "x": 150,
+      "y": 444,
+      "index": 6
     }
   },
   "orientation": "Vertical"

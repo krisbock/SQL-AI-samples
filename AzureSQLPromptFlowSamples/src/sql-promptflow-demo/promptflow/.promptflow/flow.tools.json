@@ -1,4 +1,161 @@
 {
   "package": {},
-  "code": {}
+  "code": {
+    "sql_query_store.py": {
+      "type": "python",
+      "source": "sql_query_store.py",
+      "function": "sql_query_prep"
+    },
+    "get_customer.py": {
+      "type": "python",
+      "inputs": {
+        "customer": {
+          "type": [
+            "string"
+          ]
+        },
+        "conn_db": {
+          "type": [
+            "CustomConnection"
+          ]
+        }
+      },
+      "source": "get_customer.py",
+      "function": "get_customer"
+    },
+    "get_pastorders.py": {
+      "type": "python",
+      "inputs": {
+        "customer": {
+          "type": [
+            "list"
+          ]
+        },
+        "sql_query_prep": {
+          "type": [
+            "object"
+          ]
+        },
+        "conn_db": {
+          "type": [
+            "CustomConnection"
+          ]
+        }
+      },
+      "source": "get_pastorders.py",
+      "function": "get_orders"
+    },
+    "get_product.py": {
+      "type": "python",
+      "inputs": {
+        "search_text": {
+          "type": [
+            "string"
+          ]
+        },
+        "sql_query_prep": {
+          "type": [
+            "object"
+          ]
+        },
+        "conn": {
+          "type": [
+            "CustomConnection"
+          ]
+        },
+        "conn_db": {
+          "type": [
+            "CustomConnection"
+          ]
+        },
+        "top_k": {
+          "type": [
+            "int"
+          ]
+        }
+      },
+      "source": "get_product.py",
+      "function": "get_product"
+    },
+    "get_retrieved_documents.py": {
+      "type": "python",
+      "inputs": {
+        "input1": {
+          "type": [
+            "list"
+          ]
+        },
+        "input2": {
+          "type": [
+            "list"
+          ]
+        },
+        "input3": {
+          "type": [
+            "list"
+          ]
+        }
+      },
+      "source": "get_retrieved_documents.py",
+      "function": "my_python_tool"
+    },
+    "chat.jinja2": {
+      "type": "llm",
+      "inputs": {
+        "question": {
+          "type": [
+            "string"
+          ]
+        },
+        "retrieved_products": {
+          "type": [
+            "string"
+          ]
+        },
+        "retrieved_sales_stat": {
+          "type": [
+            "string"
+          ]
+        },
+        "retrieved_customers": {
+          "type": [
+            "string"
+          ]
+        },
+        "retrieved_orders": {
+          "type": [
+            "string"
+          ]
+        },
+        "chat_history": {
+          "type": [
+            "string"
+          ]
+        }
+      },
+      "source": "chat.jinja2"
+    },
+    "get_product_stats.py": {
+      "type": "python",
+      "inputs": {
+        "products": {
+          "type": [
+            "list"
+          ]
+        },
+        "sql_query_prep": {
+          "type": [
+            "object"
+          ]
+        },
+        "conn_db": {
+          "type": [
+            "CustomConnection"
+          ]
+        }
+      },
+      "source": "get_product_stats.py",
+      "function": "get_sales_stat"
+    }
+  }
 }
