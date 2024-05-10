@@ -4,7 +4,7 @@ This is the code repository for Azure SQL Promptflow Demo. It demonstrates how t
 
 ## Prerequisites
 - Azure subscription
-- Azure Cognitive Search service
+- Azure AI Search service
 - Azure Machine Learning workspace
 - Azure SQL Server with Sample AdventureWorksLT database
 - Azure Open AI service
@@ -13,7 +13,7 @@ and the following python packages
 
 ## Developers: Note
 
-This works with the latest promptflow version as of 10/31/2023, the further improvement of promptflow will be updated in the future.
+This works with the latest Promptflow and AI Search versions as of 18/04/2024.
 
 ## Getting started
 
@@ -24,7 +24,7 @@ This works with the latest promptflow version as of 10/31/2023, the further impr
 
 ### Install python packages
 
-**Warning:** As far as we know, the only vesion of python currently working is python 3.9 environment.
+**Warning:** Tested against Python 3.9, 3.10.
 
 And install the packages by:
 
@@ -36,35 +36,58 @@ pip install -r requirements.txt
 
 ### Filling in configurations needed
 
-Create configure files in the `src/sql-promptflow-demo/configs` based on the sample files. You will need to set up Azure Open AI (AOAI), Azure Congnitive Search (ACS) and Azure SQL Server with sample AdentureWorksLT database.
+Create a .env files in the parent directory based on the sample file. You will need to set up Azure Open AI (AOAI), Azure AI Search (AIS) and Azure SQL Server with sample AdventureWorksLT database.  There is a helper notebook [Azure AI Search Prepare](src/sql-promptflow-demo/acs/azure_ai_search_prepare.ipynb)
 
-
-Note that we have two models, `aoai_deployment_name` and `aoai_agent_deployment_name`. Those can be the same, but however:
-
-1. `aoai_deployment_name` is used for the final answer produced by the model.
-2. `aoai_agent_deployment_name` is used to reformulate the question you are asking adequately.
+Note that we have two models, `AZURE_OPENAI_API_GPT_DEPLOYMENT` and `AZURE_OPENAI_API_EMB_DEPLOYMENT`. These are for the chat model (GPT) and embeddings used as part of AI Search (EMB).
 
 Default build_image: `mcr.microsoft.com/azureml/promptflow/promptflow-runtime:latest`
 
-
 ### Sending secret keys to Key Vault
 
-The AML workspace used to deploy this flow comes with a default key vault for storing secret keys. Navigate to the AML workspace in Azure Portal and in the Overview pane find the associated key vault. Grab its URI and add it as the `keyvault_uri` key within your team config.
+The AzureML workspace used to deploy this flow comes with a default key vault for storing secret keys. Navigate to the AML workspace in Azure Portal and in the Overview pane find the associated key vault. Grab its URI and add it as the `AZURE_KEYVAULT_URI` key within your .env environment file.
 
-For the file `configs/key_config_local.json` in the copilot dir (file not tracked by git) and add the following JSON structure and save:
+This repo uses .env environment files to load sensitive variables and keys (file not tracked by git).  Please update it to match your environment and save:
 
-```json
-{
-    "aoai-api-key": "<YOUR_OPENAI_KEY>",
-    "aoai-api-key-embed": "<YOUR_EMBED_OPENAI_KEY>",
-    "acs-key": "<YOUR_ACS_KEY>",
-    "connection-string": "<SQL_CONNECTION_STRING>",
-}
+```powershell
+AZURE_OPENAI_API_GPT_KEY=
+AZURE_OPENAI_API_EMB_KEY=
+AZURE_OPENAI_API_GPT_BASE=
+AZURE_OPENAI_API_EMB_BASE=
+AZURE_OPENAI_API_GPT_VERSION=
+AZURE_OPENAI_API_EMB_VERSION=
+AZURE_OPENAI_API_GPT_DEPLOYMENT=
+AZURE_OPENAI_API_EMB_DEPLOYMENT=
+AZURE_SEARCH_KEY=
+AZURE_SEARCH_INDEX=
+AZURE_SEARCH_ENDPOINT=
+#Doesn't support vectorQueries body AZURE_SEARCH_API_VERSION=2023-07-01-Preview
+AZURE_SEARCH_API_VERSION=
+AZURE_SQL_SERVER=
+AZURE_SQL_DATABASE_NAME=
+AZURE_SQL_USER=
+AZURE_SQL_PASSWORD=
+AZURE_SQL_CONNECTION_STRING=
+AZURE_KEYVAULT_URI=
+
+# PromptFlow Specific
+AZURE_OPENAI_CONNECTION_NAME= # User defined name as reference to AOAI connection in PromptFlow
+AZURE_SQL_CONNECTION_NAME=  # User defined name as reference to SQL connection in PromptFlow
+AZURE_SEARCH_CONNECTION_NAME= # User defined name as reference to AI Search connection in PromptFlow
+AZURE_OPENAI_TYPE=azure_open_ai
+
+# DEPLOYMENT
+SUBSCRIPTION_ID= # Azure Subscription ID
+AZUREML_RESOURCE_GROUP= 
+AZUREML_WORKSPACE=
+PROMPTFLOW_RUNTIME=automatic
+PROMPTFLOW_IMAGE_BASE="mcr.microsoft.com/azureml/promptflow/promptflow-runtime:latest"
+# The name for an endpoint must start with an upper- or lowercase letter and only consist of '-'s and alphanumeric characters.
+ENDPOINT_NAME=
+ENDPOINT_DEPLOYMENT_NAME=
+MODEL_NAME=
 ```
 
-You can also copy `configs/key_config_local_sample.json` and fill in your infomation.
-
-These secrets are used to access ACS, AOAI, and Azure SQL database. They will be uploaded with setup.py is run.
+The setup.py script will load keys into KeyVault.
 
 Now your secrets should be in key vault, and the flow can access these secrets locally via your `az login` auth and in deployment via the default key vault association with AML.
 
@@ -80,22 +103,25 @@ Now your secrets should be in key vault, and the flow can access these secrets l
 ### Run setup.py to set up the flow
 
 ```powershell
+cd src\sql-promptflow-demo
 python setup.py
 ```
 In case you experience authentication errors, replace `credential = DefaultAzureCredential()` with `credential = DefaultAzureCredential(exclude_shared_token_cache_credential=True)`. You will need to replace it in promptflow modules as well.
 ### Test the flow
 
 ```bash
+cd src/sql-promptflow-demo
 # run chat flow with default question in flow.dag.yaml
-python -m  promptflow._cli.pf flow test --flow . --interactive
+python -m  promptflow._cli.pf flow test --flow promptflow/. --interactive
 ```
 
-Alternatively, you can open in VS code the `flow.dag.yaml`, and there is a little "run all" icon that looks like >> at the top right, you can click it to run.
+Alternatively, you can use the VSCode plugin for PromptFlow.  open in VS code the `flow.dag.yaml`, and there is a little "run all" icon that looks like >> at the top right, you can click it to run.
 
 ### Batch run and evaluate the flow
 Prepare batch run data `data\batch_run_data.jsonl` and run the following command to batch run the flow and evaluate the results.
 
 ```bash
+cd src/sql-promptflow-demo
 python batch_run_and_eval.py
 ```
 
@@ -141,7 +167,7 @@ $response.Content
 The same flow can be executed on cloud, and the code will be uploaded to AML workspace. After that, you can deploy using the portal's UI. The job can be found from the output of the `run.py` as well as from the portal.
 
 1. To run, one need to create runtime first. And in the `configs/flow_config.json`, put the runtime name there.
-2. You need to create one AzureOpenAI connection and two custom connections from portal, one customer connection is used to connect SQL database, the other is used to connect Azure Cognitive Search and OpenAI embedding API. The connection names are specified by you as `azure_open_ai_connection_name`, `SQLDB_connection_name`, and `ACS_connection_name` in `configs/flow_config_local.json`. By running `setup.py` those connections will be automatically created. For detailed steps, see [reference](https://learn.microsoft.com/en-us/azure/machine-learning/prompt-flow/tools-reference/python-tool?view=azureml-api-2#how-to-consume-custom-connection-in-python-tool).
+2. You need to create one AzureOpenAI connection and two custom connections from the Portal; one custom connection is used to connect SQL database, the other is used to connect Azure AI Search/Azure OpenAI Embedding API. The connection names are user generated through the `AZURE_OPENAI_CONNECTION_NAME`, `AZURE_SQL_CONNECTION_NAME` and `AZURE_SEARCH_CONNECTION_NAME` in `../.env`. By running `setup.py` those connections will be automatically created. For detailed steps, see [reference](https://learn.microsoft.com/en-us/azure/machine-learning/prompt-flow/tools-reference/python-tool?view=azureml-api-2#how-to-consume-custom-connection-in-python-tool).
 
 ```bash
 # go to parent directory
@@ -157,7 +183,7 @@ For set up the promptflow, the user should have run the `setup.py` file, which w
 By running the script of `deploy.py` step by step, one can create an endpoint for the flow in their azure machine learning workspace.
 The `deploy.py` script will produce various deployment files under the `Deployments/` folder from tempaltes.
 
-**IMPORTANT**: there are two next steps you need to take to finialize setting up the PromptFlow endpoint.
+**IMPORTANT**: there are two next steps you need to take to finalize setting up the PromptFlow endpoint.
 
 1. As for running on the cloud (see above), you will need to manually create the required connections on your PromptFlow endpoint.
    CF [Create necessary connections](https://promptflow.azurewebsites.net/community/cloud/local-to-cloud.html#create-necessary-connections) for reference.
